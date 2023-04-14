@@ -14,6 +14,10 @@ include(DownloadProject)
 #
 #include_directories("${googlebenchmark_SOURCE_DIR}/include")
 
+# set top level variable
+set(SW_BENCHMARK_TOP_LEVEL ON CACHE BOOL "Suppressing benchmark's tests" FORCE)
+
+
 #find_package(benchmark REQUIRED)
 if(NOT TARGET benchmark::benchmark)
     message(STATUS "benchmark not found, try to download it")
@@ -21,10 +25,49 @@ if(NOT TARGET benchmark::benchmark)
 #    message(FATAL_ERROR "benchmark not found")
 endif()
 
-project(bench1)
-# define c++11
-set(CMAKE_CXX_STANDARD 11)
+project(sw_benchmark C CXX)
 
-add_executable(bench1
-        main.cpp)
-target_link_libraries(bench1 benchmark::benchmark)
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# set the c++ standard to c++11
+set( CMAKE_CXX_STANDARD 11 )
+
+# fin the openmp library
+find_package( OpenMP REQUIRED )
+find_package(PAPI REQUIRED)
+
+
+set_source_files_properties(include/papi_wrapper.c PROPERTIES LANGUAGE CXX )
+
+set(sw_benchmark_INCLUDE_DIRS
+        ${CMAKE_CURRENT_LIST_DIR}/include)
+set(sw_benchmark_SRC_FILES
+        ${CMAKE_CURRENT_LIST_DIR}/src/core.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/SWBench.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/SWTensorBench.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/include/papi_wrapper.c
+        )
+set(sw_benchmark_LIBRARIES
+        benchmark::benchmark
+        OpenMP::OpenMP_CXX
+        ${PAPI_LIBRARIES}
+        )
+
+
+add_library(sw_benchmark
+        ${sw_benchmark_SRC_FILES}
+        )
+target_include_directories(sw_benchmark PRIVATE
+        ${sw_benchmark_INCLUDE_DIRS}
+        )
+target_link_libraries(sw_benchmark PRIVATE
+        ${sw_benchmark_LIBRARIES}
+        )
+
+target_compile_definitions(sw_benchmark PRIVATE PW_MULTITHREAD)
+target_compile_options(sw_benchmark PRIVATE "-fopenmp")
+
+if(SW_BENCHMARK_TOP_LEVEL)
+    add_subdirectory(
+            example)
+endif()

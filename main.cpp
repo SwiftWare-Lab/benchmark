@@ -24,14 +24,12 @@ protected:
  Stats *St;
 
 
-
-
  virtual void setup(){
   std::cout<<"TestingBench::setup()"<<std::endl;
  }
 
  virtual void inspect(){
-  std::cout<<"TestingBench::inspect()"<<std::endl;
+  std::cout<<"TestingBench::analysis()"<<std::endl;
  }
 
  virtual double test(){
@@ -64,7 +62,7 @@ protected:
  }
 
  void inspect() override{
-  std::cout<<"Test1::inspect()"<<std::endl;
+  std::cout<<"Test1::analysis()"<<std::endl;
  }
 
  double test() override{
