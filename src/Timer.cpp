@@ -1,30 +1,26 @@
 //
 // Created by kazem on 2023-04-14.
 //
-#include "core.h"
-#include <iostream>
+
+#include "Timer.h"
+#include <cassert>
 
 namespace swiftware{
  namespace benchmark{
 
-  void Stats::printCSV(bool PrintHeader, std::streambuf *Out, std::string Sep) {
-   std::ostream os(Out);
-   std::string pHeader="", pCSV="";
-   if (PrintHeader) {
-    os << "Name"<<Sep<<"Number of Trials"<<Sep;
-    for (auto &i : OtherStats) {
-     os << i.first << Sep;
-    }
-    pCSV = ProfilingInfoTrials[0]->printCSV(pHeader);
-    os << pHeader << std::endl;
-    os << std::endl;
+  Timer::Timer() {
+   IsRunning = false;
+   ElapsedSeconds = std::chrono::duration<double>(0);
+  }
+
+  Timer::Timer(const Timer &T){
+   for (const auto ele : T.ElapsedTimeArray) {
+    ElapsedTimeArray.push_back(ele);
    }
-   os << Name << Sep << NumTrials << Sep;
-   for (auto &i : OtherStats) {
-    os << i.second[0] << ",";
-   }
-   os << pCSV << std::endl;
-   os << std::endl;
+   IsRunning = T.IsRunning;
+   StartTime = T.StartTime;
+   EndTime = T.EndTime;
+   ElapsedSeconds = T.ElapsedSeconds;
   }
 
   void Timer::start() {
@@ -53,11 +49,11 @@ namespace swiftware{
    IsRunning = false;
   }
 
-  std::string Timer::printTimeCsv(std::string &Header) {
+  std::string Timer::printTimeCsv(int TrialNo, std::string &Header) {
    std::string csv;
    for (auto &i : ElapsedTimeArray) {
     csv += std::to_string(i.first) + ",";
-    Header += i.second + ",";
+    Header += i.second + "_" + std::to_string(TrialNo) + ",";
    }
    return csv;
   }

@@ -15,9 +15,11 @@ using namespace swiftware::benchmark;
 // y is mx1
 // y = A*x
 void GEMV(int m, int n, double *A, double *x, double *y) {
+ pw_init_instruments;
 #pragma omp parallel
  {
   pw_start_instruments_loop(omp_get_thread_num());
+#pragma omp parallel for
   for (int i = 0; i < m; i++) {
    double sum = 0;
    for (int j = 0; j < n; j++) {
@@ -48,7 +50,7 @@ protected:
   Timer t;
   t.start();
   GEMV(In->Dim1, In->Dim2, In->A, In->x, In->y);
-  t.stop("GEMV Sequential");
+  t.stop(St->Name);
   return t;
  }
 
@@ -80,14 +82,12 @@ int main(int argc, char *argv[]) {
   in->x[i] = (double) rand() / RAND_MAX;
  }
  in->y = new double[in->Dim1];
-
- auto *st = new Stats();
+ in->NumTrials = 2;
+ auto *st = new Stats( "GEMV Parallel", in->NumTrials);
  for (int i = 0; i < in->Dim1; ++i) {
   in->CorrectSol[i] = 0;
  }
  in->Threshold = 1e-6;
- in->NumTrials = 7;
- auto *st1 = new Stats();
  GEMVWithPAPI *gemv = new GEMVWithPAPI(in, st);
  gemv->run();
  gemv->printStats();

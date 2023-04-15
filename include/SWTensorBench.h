@@ -38,7 +38,6 @@ namespace swiftware{
    protected:
    Inputs<T> *In;
    Outputs<T> *Out{};
-   Stats *St;
 
 
    bool verify(double &Error) override{
@@ -58,7 +57,8 @@ namespace swiftware{
 
   public:
    SWTensorBench(Inputs<T> *In1, Stats *St1):
-    In(In1), St(St1){}
+   SWBench(St1), In(In1){
+   }
 
     ~SWTensorBench() {
     }

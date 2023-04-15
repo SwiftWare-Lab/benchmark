@@ -5,7 +5,7 @@
 #ifndef SW_BENCHMARK_SWBENCH_H
 #define SW_BENCHMARK_SWBENCH_H
 
-#include "core.h"
+#include "Stats.h"
 
 
 namespace swiftware{
@@ -32,7 +32,7 @@ namespace swiftware{
     return Timer();
    }
 
-   virtual void collectProfilingInfo();
+   virtual void collectProfilingInfo(int TrialNo = 0);
    virtual void enableProfiling();
 
    virtual bool verify(double &Error){
@@ -44,7 +44,7 @@ namespace swiftware{
 
   public:
 
-   SWBench();
+   SWBench(Stats *St1);
    ~SWBench();
 
    /*
@@ -52,7 +52,7 @@ namespace swiftware{
     */
    void run();
 
-   void printStats(){
+   virtual void printStats(){
     St->printCSV();
    }
   };

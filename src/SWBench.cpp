@@ -11,38 +11,37 @@
 
 namespace swiftware{
  namespace benchmark{
-  SWBench::SWBench(){
-   St = new Stats();
+  SWBench::SWBench(Stats *St1):St(St1){
   }
 
   SWBench::~SWBench(){
-   delete St;
+   //delete St;
   }
 
   void SWBench::run(){
    double error;
    setup();
    auto ta = analysis();
-   St->AnalysisTime.push_back(ta);
    for (int i = 0; i < St->NumTrials; ++i) {
+    St->ProfilingInfoTrials[i]->AnalysisTime = ta; // same inspector time for all trials
     preExecute();
     enableProfiling();
     auto te = execute();
-    St->ExecutorTime.push_back(te);
-    collectProfilingInfo();
+    St->ProfilingInfoTrials[i]->ExecutorTime = te;
+    collectProfilingInfo(i);
     auto flag = verify(error);
-    St->ErrorPerExecute.push_back(std::make_pair(flag,error));
+    St->ProfilingInfoTrials[i]->ErrorPerExecute = std::make_pair(flag,error);
    }
    teardown();
   }
 
   void SWBench::enableProfiling(){
-#ifdef SWBENCH_WITH_PAPI
-   pw_init_instruments;
-#endif
+//#ifdef SWBENCH_WITH_PAPI
+//   pw_init_instruments;
+//#endif
   }
 
-  void SWBench::collectProfilingInfo(){
+  void SWBench::collectProfilingInfo(int TrialNo){
 #ifdef SWBENCH_WITH_PAPI
 
 #if defined(_OPENMP)
@@ -67,7 +66,8 @@ namespace swiftware{
    // counting the number of events
    for (nEvents = 0; PW_EVTLST(__pw_nthread, nEvents) != 0;
         ++nEvents);
-   auto *pi = new ProflingInfo(pwNthreads, 1, nEvents);
+   auto *pi = St->ProfilingInfoTrials[TrialNo]; //new ProflingInfo(pwNthreads, 1, nEvents);
+   pi->resizeValueArray(pwNthreads, 1, nEvents);
 #    pragma omp for ordered schedule(static, 1)
    for (pwNthread = 0; pwNthread < pwNthreads; ++pwNthread){
     int pwEvid;
@@ -105,8 +105,8 @@ namespace swiftware{
 #        pragma omp barrier
 #    endif
 #endif
-   St->ProfilingInfoTrials.push_back(pi);
-   pw_close();
+   St->ProfilingInfoTrials[TrialNo] = pi;
+  // pw_close();
 #endif //SWBENCH_WITH_PAPI
   }
 
