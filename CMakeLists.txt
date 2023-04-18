@@ -9,7 +9,8 @@ include(DownloadProject)
 # set top level variable
 set(SW_BENCHMARK_TOP_LEVEL ON CACHE BOOL "Suppressing benchmark's tests" FORCE)
 set(GOOGLE_BENCHMARK_REQUIRED OFF CACHE BOOL "GBench is needed" FORCE)
-
+set(PROFILING_WITH_PAPI OFF CACHE BOOL "PAPI is needed" FORCE)
+set(PROFILING_WITH_LIKWID ON CACHE BOOL "LIKWID is needed" FORCE)
 
 
 project(sw_benchmark C CXX)
@@ -19,13 +20,41 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set( CMAKE_CXX_STANDARD 11 )
 
 find_package( OpenMP REQUIRED)
-find_package(PAPI REQUIRED)
 set(sw_benchmark_LIBRARIES
         OpenMP::OpenMP_CXX
-        ${PAPI_LIBRARIES}
         )
-find_package(benchmark OPTIONAL_COMPONENTS)
 
+if (PROFILING_WITH_LIKWID)
+    find_package(likwid REQUIRED)
+    set(sw_benchmark_LIBRARIES
+            ${sw_benchmark_LIBRARIES}
+            ${likwid_LIBRARIES}
+            )
+    set(sw_benchmark_INCLUDE_DIRS
+            ${sw_benchmark_INCLUDE_DIRS}
+            ${likwid_INCLUDE_DIRS}
+            )
+    add_compile_definitions(PROF_WITH_LIKWID)
+elseif (PROFILING_WITH_PAPI)
+    find_package(PAPI REQUIRED)
+    set(sw_benchmark_LIBRARIES
+            ${sw_benchmark_LIBRARIES}
+            ${PAPI_LIBRARIES}
+            )
+    set(sw_benchmark_INCLUDE_DIRS
+            ${sw_benchmark_INCLUDE_DIRS}
+            ${PAPI_INCLUDE_DIRS}
+            )
+    add_compile_definitions(PROF_WITH_PAPI)
+    set(sw_benchmark_SRC_FILES
+            ${sw_benchmark_SRC_FILES}
+            ${CMAKE_CURRENT_LIST_DIR}/src/papi_wrapper.cpp
+            )
+    target_compile_definitions(sw_benchmark PRIVATE PW_MULTITHREAD)
+    target_compile_options(sw_benchmark PRIVATE "-fopenmp")
+endif ()
+
+find_package(benchmark OPTIONAL_COMPONENTS)
 if(NOT TARGET benchmark::benchmark AND GOOGLE_BENCHMARK_REQUIRED)
     message(STATUS "benchmark not found, try to download it")
     include(benchmark)
@@ -40,14 +69,14 @@ endif()
 set_source_files_properties(include/papi_wrapper.cpp PROPERTIES LANGUAGE CXX )
 
 set(sw_benchmark_INCLUDE_DIRS
-        ${CMAKE_CURRENT_LIST_DIR}/include)
+        ${CMAKE_CURRENT_LIST_DIR}/include
+        )
 set(sw_benchmark_SRC_FILES
         ${CMAKE_CURRENT_LIST_DIR}/src/Timer.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/Stats.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/ProfilingInfo.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/SWBench.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/SWTensorBench.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/src/papi_wrapper.cpp
         )
 
 
@@ -61,9 +90,6 @@ target_include_directories(sw_benchmark PRIVATE
 target_link_libraries(sw_benchmark PRIVATE
         ${sw_benchmark_LIBRARIES}
         )
-
-target_compile_definitions(sw_benchmark PRIVATE PW_MULTITHREAD)
-target_compile_options(sw_benchmark PRIVATE "-fopenmp")
 
 if(SW_BENCHMARK_TOP_LEVEL)
     add_subdirectory(

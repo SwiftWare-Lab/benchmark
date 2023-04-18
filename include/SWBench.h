@@ -32,8 +32,8 @@ namespace swiftware{
     return Timer();
    }
 
-   virtual void collectProfilingInfo(int TrialNo = 0);
-   virtual void enableProfiling();
+   virtual int collectProfilingInfo(int TrialNo = 0);
+   virtual int enableProfiling();
 
    virtual bool verify(double &Error){
     return true;

@@ -37,9 +37,13 @@ namespace swiftware{
    }
 
   std::string convertCodeToString(int Code){
+#ifdef PROF_WITH_PAPI
    char eventCodeStr[PAPI_MAX_STR_LEN];
    PAPI_event_code_to_name(Code,eventCodeStr);
    std::string ret(eventCodeStr);
+#else
+   std::string ret="";
+#endif
    return ret;
   }
 

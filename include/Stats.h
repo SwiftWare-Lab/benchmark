@@ -14,7 +14,7 @@
 #include <map>
 namespace swiftware{
  namespace benchmark{
-#define SWBENCH_WITH_PAPI
+//#define SWBENCH_WITH_PAPI
 
   struct Stats{
    // name and general properties of the benchmark
