@@ -40,7 +40,7 @@ void SWBench::run(){
 
 int SWBench::enableProfiling(){
 //#ifdef PROF_WITH_PAPI
-//   pw_init_instruments;
+//  pw_init_instruments;
 //#endif
 #ifdef PROF_WITH_LIKWID
   int i, j;
@@ -48,8 +48,8 @@ int SWBench::enableProfiling(){
   int* cpus;
   int gid;
   double result = 0.0;
-  char estr[] = "L2_LINES_IN_ALL:PMC0,L2_TRANS_L2_WB:PMC1";
-  char* enames[2] = {"L2_LINES_IN_ALL:PMC0","L2_TRANS_L2_WB:PMC1"};
+  char estr[] = "UOPS_EXECUTED_TOTAL_CYCLES:PMC0,L2_TRANS_L2_WB:PMC1";
+  char* enames[2] = {"UOPS_EXECUTED_TOTAL_CYCLES:PMC0","L2_TRANS_L2_WB:PMC1"};
   int n = sizeof(enames) / sizeof(enames[0]);
   //perfmon_setVerbosity(3);
   // Load the topology module and print some values.
@@ -60,9 +60,12 @@ int SWBench::enableProfiling(){
     return 1;
   }
   // CpuInfo_t contains global information like name, CPU family, ...
-  CpuInfo_t info = get_cpuInfo();
+
+  St->CpuInfo = get_cpuInfo();
   // CpuTopology_t contains information about the topology of the CPUs.
-  CpuTopology_t topo = get_cpuTopology();
+  St->CpuTopo = get_cpuTopology();
+  auto *info = St->CpuInfo;
+  auto *topo = St->CpuTopo;
   // Create affinity domains. Commonly only needed when reading Uncore counters
   affinity_init();
 
@@ -133,31 +136,19 @@ int SWBench::collectProfilingInfo(int TrialNo){
   char estr[] = "L2_LINES_IN_ALL:PMC0,L2_TRANS_L2_WB:PMC1";
   char* enames[2] = {"L2_LINES_IN_ALL:PMC0","L2_TRANS_L2_WB:PMC1"};
   int n = sizeof(enames) / sizeof(enames[0]);
-  //perfmon_setVerbosity(3);
-  // Load the topology module and print some values.
-  err = topology_init();
-  if (err < 0)
-  {
-    printf("Failed to initialize LIKWID's topology module\n");
-    return 1;
-  }
-  // CpuInfo_t contains global information like name, CPU family, ...
-  CpuInfo_t info = get_cpuInfo();
-  // CpuTopology_t contains information about the topology of the CPUs.
-  CpuTopology_t topo = get_cpuTopology();
-  // Create affinity domains. Commonly only needed when reading Uncore counters
-  affinity_init();
 
+  auto *info = St->CpuInfo;
+  auto *topo = St->CpuTopo;
   printf("Likwid example on a %s with %d CPUs\n", info->name, topo->numHWThreads);
-
-  cpus = (int*)malloc(topo->numHWThreads * sizeof(int));
-  if (!cpus)
-    return 1;
-
-  for (i=0;i<topo->numHWThreads;i++)
-  {
-    cpus[i] = topo->threadPool[i].apicId;
-  }
+  auto *cpu = St->Cpus;
+//  cpus = (int*)malloc(topo->numHWThreads * sizeof(int));
+//  if (!cpus)
+//    return 1;
+//
+//  for (i=0;i<topo->numHWThreads;i++)
+//  {
+//    cpus[i] = topo->threadPool[i].apicId;
+//  }
   err = perfmon_readCounters();
   if (err < 0)
   {
@@ -177,8 +168,8 @@ int SWBench::collectProfilingInfo(int TrialNo){
       printf("- event set %s at CPU %d: %f\n", enames[j], cpus[i], result);
     }
   }
-
 #endif
+
 #ifdef PROF_WITH_PAPI
 #if defined(_OPENMP)
 #    if !defined(PW_MULTITHREAD)
@@ -244,6 +235,7 @@ int SWBench::collectProfilingInfo(int TrialNo){
   St->ProfilingInfoTrials[TrialNo] = pi;
   // pw_close();
 #endif //SWBENCH_WITH_PAPI
+  return 0;
 }
 
 

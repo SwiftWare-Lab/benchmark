@@ -50,8 +50,7 @@ elseif (PROFILING_WITH_PAPI)
             ${sw_benchmark_SRC_FILES}
             ${CMAKE_CURRENT_LIST_DIR}/src/papi_wrapper.cpp
             )
-    target_compile_definitions(sw_benchmark PRIVATE PW_MULTITHREAD)
-    target_compile_options(sw_benchmark PRIVATE "-fopenmp")
+
 endif ()
 
 find_package(benchmark OPTIONAL_COMPONENTS)
@@ -72,6 +71,7 @@ set(sw_benchmark_INCLUDE_DIRS
         ${CMAKE_CURRENT_LIST_DIR}/include
         )
 set(sw_benchmark_SRC_FILES
+        ${sw_benchmark_SRC_FILES}
         ${CMAKE_CURRENT_LIST_DIR}/src/Timer.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/Stats.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/ProfilingInfo.cpp
@@ -90,7 +90,10 @@ target_include_directories(sw_benchmark PRIVATE
 target_link_libraries(sw_benchmark PRIVATE
         ${sw_benchmark_LIBRARIES}
         )
-
+if (PROFILING_WITH_PAPI)
+    target_compile_definitions(sw_benchmark PRIVATE PW_MULTITHREAD)
+    target_compile_options(sw_benchmark PRIVATE "-fopenmp")
+endif ()
 if(SW_BENCHMARK_TOP_LEVEL)
     add_subdirectory(
             example)

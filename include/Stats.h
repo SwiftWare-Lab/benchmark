@@ -12,6 +12,9 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#ifdef PROF_WITH_LIKWID
+#include <likwid.h>
+#endif
 namespace swiftware{
  namespace benchmark{
 //#define SWBENCH_WITH_PAPI
@@ -27,6 +30,14 @@ namespace swiftware{
 
    // a map to store other stats
    std::map<std::string, std::vector<double>> OtherStats;
+
+   // Likwid stats
+#ifdef PROF_WITH_LIKWID
+   CpuInfo_t CpuInfo;
+   CpuTopology_t CpuTopo;
+   int* Cpus;
+
+#endif
 
    void printCSV(bool PrintHeader=true, std::streambuf* Out = std::cout.rdbuf(), std::string Sep=",");
 

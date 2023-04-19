@@ -21,6 +21,7 @@ namespace swiftware{
    /// PCV[i][j][k] = i'th subregion, j'th thread, k'th event
    std::vector<std::vector<std::vector<long long >>> PerformanceCounterValues;
    std::vector<int> EventSet; // Event set for each subregion of the executor
+   std::vector<std::string> EventSetStr; // event set for likwid
 
    Timer AnalysisTime, ExecutorTime;
    std::pair<bool,double> ErrorPerExecute;
