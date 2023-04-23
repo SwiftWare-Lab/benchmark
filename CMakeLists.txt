@@ -9,8 +9,8 @@ include(DownloadProject)
 # set top level variable
 set(SW_BENCHMARK_TOP_LEVEL ON CACHE BOOL "Suppressing benchmark's tests" FORCE)
 set(GOOGLE_BENCHMARK_REQUIRED OFF CACHE BOOL "GBench is needed" FORCE)
-set(PROFILING_WITH_PAPI OFF CACHE BOOL "PAPI is needed" FORCE)
-set(PROFILING_WITH_LIKWID ON CACHE BOOL "LIKWID is needed" FORCE)
+set(PROFILING_WITH_PAPI ON CACHE BOOL "PAPI is needed" FORCE)
+set(PROFILING_WITH_LIKWID OFF CACHE BOOL "LIKWID is needed" FORCE)
 
 
 project(sw_benchmark C CXX)
@@ -25,6 +25,7 @@ set(sw_benchmark_LIBRARIES
         )
 
 if (PROFILING_WITH_LIKWID)
+    set(LIKWID_DIR "" CACHE PATH "Path likwid performance monitoring and benchmarking suite")
     find_package(likwid REQUIRED)
     set(sw_benchmark_LIBRARIES
             ${sw_benchmark_LIBRARIES}
@@ -68,6 +69,7 @@ endif()
 set_source_files_properties(include/papi_wrapper.cpp PROPERTIES LANGUAGE CXX )
 
 set(sw_benchmark_INCLUDE_DIRS
+        ${sw_benchmark_INCLUDE_DIRS}
         ${CMAKE_CURRENT_LIST_DIR}/include
         )
 set(sw_benchmark_SRC_FILES

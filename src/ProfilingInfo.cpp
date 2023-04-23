@@ -2,7 +2,10 @@
 // Created by kazem on 2023-04-14.
 //
 
-#include <papi.h>
+#ifdef PROF_WITH_PAPI
+#include "papi.h"
+#endif
+
 #include "ProfilingInfo.h"
 
 namespace swiftware{
