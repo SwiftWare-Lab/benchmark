@@ -50,16 +50,27 @@ namespace swiftware{
    return ret;
   }
 
-   std::string ProfilingInfo::printCSV(int TrialNo, std::string &Header, std::string Sep){
+  std::string ProfilingInfo::printCSVHeader(std::string Name, int TrialNo, std::string Sep){
+   std::string Header;
+   for (int i = 0; i < NumSubregions; ++i) {
+     for (int j = 0; j < NumThreads; ++j) {
+      for (int k = 0; k < NumEvents; ++k) {
+        Header += Name + " Trial" + std::to_string(TrialNo)+" Subregion"+std::to_string(i)+
+                  " Thread"+std::to_string(j)//+"_Event"+std::to_string(k)
+                  +" "+convertCodeToString(EventSet[k])
+                  + Sep;
+      }
+     }
+   }
+   return Header;
+  }
+
+   std::string ProfilingInfo::printCSV(int TrialNo, std::string Sep){
     std::string csv;
     for (int i = 0; i < NumSubregions; ++i) {
      for (int j = 0; j < NumThreads; ++j) {
       for (int k = 0; k < NumEvents; ++k) {
        csv += std::to_string(PerformanceCounterValues[i][j][k]) + Sep;
-       Header += "Trial" + std::to_string(TrialNo)+"_Subregion"+std::to_string(i)+
-         "_Thread"+std::to_string(j)//+"_Event"+std::to_string(k)
-         +"_"+convertCodeToString(EventSet[k])
-         + Sep;
       }
      }
     }

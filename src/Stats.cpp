@@ -3,43 +3,73 @@
 //
 #include "Stats.h"
 #include <iostream>
+#include <sstream>
 
 namespace swiftware{
- namespace benchmark{
+namespace benchmark{
 
-  Stats::Stats(std::string Name, int NumTrials):
-  Name(Name), NumTrials(NumTrials){
-   ProfilingInfoTrials.resize(NumTrials);
-   for (int i = 0; i < NumTrials; ++i) {
+Stats::Stats(std::string Name, std::string OpName, int NumTrials):
+            Name(Name), OperationName(OpName), NumTrials(NumTrials){
+  ProfilingInfoTrials.resize(NumTrials);
+  for (int i = 0; i < NumTrials; ++i) {
     ProfilingInfoTrials[i] = new ProfilingInfo();
-   }
   }
+}
 
-  void Stats::printCSV(bool PrintHeader, std::streambuf *Out, std::string Sep) {
-   std::ostream os(Out);
-   std::string pHeader="", tHeader="", pCSV="", tCSV="";
-   if (PrintHeader) {
-    os << "Operation Name"<<Sep<<"Number of Trials"<<Sep;
+std::string Stats::printCSVHeader(std::string Sep) {
+  std::ostringstream os;
+  std::string pHeader="", tHeader="", analysisHeader="";
+  assert(NumTrials>=1);
+  assert(ProfilingInfoTrials.size()>=1);
+    os <<"Operation Name"<<Sep<<"Implementation Name"<<Sep<<"Number of Trials"<<Sep;
+    os <<"Matrix Name"<<Sep<<"Number of Threads"<<Sep<<"Number of Subregions"<<Sep;
+    analysisHeader = ProfilingInfoTrials[0]->AnalysisTime.printTimeCsvHeader(Name, 0);
     for (int i = 0; i < NumTrials; ++i) {
-     //tHeader += "Trial" + std::to_string(i) + "_Time" + Sep;
-     //pHeader += ProfilingInfoTrials[i]->printCSVHeader(Sep);
-     tCSV += ProfilingInfoTrials[i]->ExecutorTime.printTimeCsv(i, tHeader);
-     pCSV += ProfilingInfoTrials[i]->printCSV(i, pHeader);
-     os << tHeader << pHeader << std::endl;
+      //tHeader += "Trial" + std::to_string(i) + "_Time" + Sep;
+      //pHeader += ProfilingInfoTrials[i]->printCSVHeader(Sep);
+      tHeader = ProfilingInfoTrials[i]->ExecutorTime.printTimeCsvHeader(
+          "Executor", i);
+      pHeader += ProfilingInfoTrials[i]->printCSVHeader("", i);
+      auto err = "Correct" + std::to_string(i) + Sep + "Error" + std::to_string(i);
+      os << analysisHeader << tHeader << pHeader << err << Sep;
     }
-
     for (auto &i : OtherStats) {
-     os << i.first << Sep;
+      for (int j = 0; j < i.second.size(); ++j) {
+        os << i.first +std::to_string(j)<< Sep;
+      }
     }
-    os << std::endl;
-   }
-   os << OperationName << Sep << NumTrials << Sep;
-   os << tCSV << pCSV << std::endl;
-   for (auto &i : OtherStats) {
-    os << i.second[0] << ",";
-   }
-   os << std::endl;
-  }
+    //os << std::endl;
+  return os.str();
+}
 
- } // namespace benchmark
+
+std::string Stats::printCSV(std::string Sep) {
+  std::ostringstream os;
+  std::string pCSV="", tCSV="", analysisCSV="";
+  assert(NumTrials>=1);
+  assert(ProfilingInfoTrials.size()>=1);
+  os << OperationName << Sep<< Name<< Sep << NumTrials << Sep;
+  os << MatrixName << Sep << ProfilingInfoTrials[0]->NumThreads <<
+      Sep << ProfilingInfoTrials[0]->NumSubregions << Sep;
+  analysisCSV = ProfilingInfoTrials[0]->AnalysisTime.printTimeCsv(0);
+  os << analysisCSV;
+  for (int i = 0; i < NumTrials; ++i) {
+    //tHeader += "Trial" + std::to_string(i) + "_Time" + Sep;
+    //pHeader += ProfilingInfoTrials[i]->printCSVHeader(Sep);
+    tCSV = ProfilingInfoTrials[i]->ExecutorTime.printTimeCsv(i);
+    pCSV += ProfilingInfoTrials[i]->printCSV( i);
+    auto err = std::to_string(ProfilingInfoTrials[i]->ErrorPerExecute.first)+
+        Sep+std::to_string(ProfilingInfoTrials[i]->ErrorPerExecute.second);
+    os << tCSV << pCSV << err << Sep;
+  }
+  for (auto &i : OtherStats) {
+    for (int j = 0; j < i.second.size(); ++j) {
+      os << i.second[j]<< Sep;
+    }
+  }
+  //os << std::endl;
+  return os.str();
+}
+
+} // namespace benchmark
 } // namespace swiftware

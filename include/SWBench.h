@@ -54,8 +54,11 @@ namespace swiftware{
     */
    void run();
 
-   virtual void printStats(){
-    St->printCSV();
+   virtual std::string printStatsHeader(){
+    return St->printCSVHeader();
+   }
+   virtual std::string printStats(){
+    return St->printCSV();
    }
   };
 

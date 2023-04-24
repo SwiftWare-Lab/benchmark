@@ -26,14 +26,20 @@ namespace swiftware{
    /// Start the timer
    void start();
 
-   /// Stop the timer
+   /// Stop the timer, and return the elapsed time in seconds.
+   /// Also add the region name to the array of elapsed times
+   /// the start() must be called before this call once
+   /// any call to stop added a time to the array (supporting multiple regions )
    double stop(std::string RegionName);
 
    /// Reset the timer
    void reset ();
 
-   /// Print the time in csv format, and add the region name to the header
-   std::string printTimeCsv(int TrialNo, std::string &Header);
+   /// Print the time in csv format, and add the region name/ or a generic
+   /// Name to the header
+   std::string printTimeCsvHeader(std::string Name, int TrialNo, std::string Sep=",");
+
+   std::string printTimeCsv(int TrialNo, std::string Sep=",");
   };
 
  } // end namespace benchmark

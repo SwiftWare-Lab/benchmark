@@ -49,11 +49,20 @@ namespace swiftware{
    IsRunning = false;
   }
 
-  std::string Timer::printTimeCsv(int TrialNo, std::string &Header) {
+  std::string Timer::printTimeCsvHeader(std::string Name, int TrialNo, std::string Sep) {
+   std::string header;
+   for (int i = 0; i < ElapsedTimeArray.size(); i++) {
+    std::string n1 = Name != "" ? Name : ElapsedTimeArray[i].second ;
+    header += n1 + " Trial" + std::to_string(TrialNo)
+              + " Subregion" + std::to_string(i) +  Sep;
+   }
+   return header;
+  }
+
+  std::string Timer::printTimeCsv(int TrialNo, std::string Sep) {
    std::string csv;
-   for (auto &i : ElapsedTimeArray) {
-    csv += std::to_string(i.first) + ",";
-    Header += i.second + "_" + std::to_string(TrialNo) + ",";
+   for (int i = 0; i < ElapsedTimeArray.size(); i++) {
+    csv += std::to_string(ElapsedTimeArray[i].first) + Sep;
    }
    return csv;
   }

@@ -39,9 +39,11 @@ namespace swiftware{
 
 #endif
 
-   void printCSV(bool PrintHeader=true, std::streambuf* Out = std::cout.rdbuf(), std::string Sep=",");
+   //bool PrintHeader=true, std::streambuf* Out = std::cout.rdbuf(),
+   std::string printCSVHeader( std::string Sep=",");
+   std::string printCSV(std::string Sep=",");
 
-   Stats(std::string Name, int NumTrials);
+   Stats(std::string Name, std::string OpName, int NumTrials);
 
   };
 

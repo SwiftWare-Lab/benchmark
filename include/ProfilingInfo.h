@@ -32,7 +32,8 @@ namespace swiftware{
 
    void resizeValueArray(int NumThreadsIn, int NumSubregionsIn, int NumEventsIn);
 
-   std::string printCSV(int TrialNo, std::string &Header, std::string Sep=",");
+   std::string printCSVHeader(std::string Name, int TrialNo, std::string Sep=",");
+   std::string printCSV(int TrialNo, std::string Sep=",");
 
   };
 
