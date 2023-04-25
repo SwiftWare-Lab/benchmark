@@ -170,10 +170,13 @@ extern int               pw_counters_threadid;
  * @brief Init PAPI library and prepare instruments: flush cache of all
  * threads, basically
  */
+#ifdef PROF_WITH_PAPI
 #    define pw_init_instruments \
         pw_init();              \
         pw_prepare_instruments();
-
+#else
+#    define pw_init_instruments
+#endif
 /**
  * @brief Init PAPI library and prepare instruments: flush cache of all
  * threads
@@ -204,13 +207,16 @@ extern int               pw_counters_threadid;
 /**
  * @brief Init for a concrete thread
  */
+#ifdef PROF_WITH_PAPI
 #    define pw_start_instruments_loop(th)                              \
         int __pw_evid;                                                 \
         for (__pw_evid = 0; pw_eventlist[__pw_evid] != 0; __pw_evid++) \
         {                                                              \
             pw_prepare_instruments();                                  \
             pw_start_counter_thread(__pw_evid, th);
-
+#else
+#    define pw_start_instruments_loop(th)
+#endif
 /**
  * @brief Stop hardware counters
  */
@@ -221,9 +227,13 @@ extern int               pw_counters_threadid;
 /**
  * @brief Stop
  */
+#ifdef PROF_WITH_PAPI
 #    define pw_stop_instruments_loop(__pw_th)       \
         pw_stop_counter_thread(__pw_evid, __pw_th); \
         }
+#else
+#    define pw_stop_instruments_loop(__pw_th)
+#endif
 
 /**
  * @brief Begin the subregion

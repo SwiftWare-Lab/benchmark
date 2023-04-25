@@ -54,6 +54,7 @@ elseif (PROFILING_WITH_PAPI)
 
 endif ()
 
+# TODO: google benchmark is not used yet, might be used in the future
 find_package(benchmark OPTIONAL_COMPONENTS)
 if(NOT TARGET benchmark::benchmark AND GOOGLE_BENCHMARK_REQUIRED)
     message(STATUS "benchmark not found, try to download it")
@@ -96,6 +97,7 @@ if (PROFILING_WITH_PAPI)
     target_compile_definitions(sw_benchmark PRIVATE PW_MULTITHREAD)
     target_compile_options(sw_benchmark PRIVATE "-fopenmp")
 endif ()
+
 if(SW_BENCHMARK_TOP_LEVEL)
     add_subdirectory(
             example)

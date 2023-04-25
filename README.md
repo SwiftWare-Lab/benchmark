@@ -21,11 +21,13 @@ make
 ./benchmark
 ```
 
-## Gettings started
+## Getting started
 
 ### Adding the benchmark to your code base
 You will first need to add the benchmark to your code base. You can add the repo 
 to your cmakefile similar to the example provided in [here]().
 
-### Adding a new benchmark
+### Enabling profiling mode
+
 You will first need to set up your benchmark
+
