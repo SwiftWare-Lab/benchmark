@@ -54,7 +54,7 @@ the repo to your cmakefile similar to the example provided in
 [here](https://github.com/SwiftWare-Lab/practice).
 
 ### Enabling profiling mode
-Then you can follow the example provided in gemvWithPapi.cpp to measure 
+Then you can follow the example provided in gemvWithPapi to measure 
 the performance of different implementations of gemv. 
 
 ### Analyzing the results
