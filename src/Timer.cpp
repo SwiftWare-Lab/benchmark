@@ -53,8 +53,9 @@ namespace swiftware{
    std::string header;
    for (int i = 0; i < ElapsedTimeArray.size(); i++) {
     std::string n1 = Name != "" ? Name : ElapsedTimeArray[i].second ;
-    header += n1 + " Trial" + std::to_string(TrialNo)
-              + " Subregion" + std::to_string(i) +  Sep;
+    header += "Trial" + std::to_string(TrialNo)
+              + " Subregion" + std::to_string(i) + " " + n1
+              +  Sep;
    }
    return header;
   }

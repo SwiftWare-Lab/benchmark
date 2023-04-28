@@ -13,7 +13,7 @@ set(PROFILING_WITH_PAPI ON CACHE BOOL "PAPI is needed" FORCE)
 set(PROFILING_WITH_LIKWID OFF CACHE BOOL "LIKWID is needed" FORCE)
 
 
-project(sw_benchmark C CXX)
+project(swbench C CXX)
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # set the c++ standard to c++11
@@ -25,6 +25,7 @@ set(sw_benchmark_LIBRARIES
         )
 
 if (PROFILING_WITH_LIKWID)
+    message(STATUS "Profiling with LIKWID is enabled")
     set(LIKWID_DIR "" CACHE PATH "Path likwid performance monitoring and benchmarking suite")
     find_package(likwid REQUIRED)
     set(sw_benchmark_LIBRARIES
@@ -37,6 +38,7 @@ if (PROFILING_WITH_LIKWID)
             )
     add_compile_definitions(PROF_WITH_LIKWID)
 elseif (PROFILING_WITH_PAPI)
+    message(STATUS "Profiling with PAPI is enabled")
     find_package(PAPI REQUIRED)
     set(sw_benchmark_LIBRARIES
             ${sw_benchmark_LIBRARIES}
@@ -84,19 +86,22 @@ set(sw_benchmark_SRC_FILES
 
 
 
-add_library(sw_benchmark
+add_library(swbench
         ${sw_benchmark_SRC_FILES}
         )
-target_include_directories(sw_benchmark PRIVATE
+target_include_directories(swbench PRIVATE
         ${sw_benchmark_INCLUDE_DIRS}
         )
-target_link_libraries(sw_benchmark PRIVATE
+target_link_libraries(swbench PRIVATE
         ${sw_benchmark_LIBRARIES}
         )
 if (PROFILING_WITH_PAPI)
-    target_compile_definitions(sw_benchmark PRIVATE PW_MULTITHREAD)
-    target_compile_options(sw_benchmark PRIVATE "-fopenmp")
+    #target_compile_definitions(swbench PRIVATE PW_MULTITHREAD)
+    add_compile_definitions(PW_MULTITHREAD)
+    #target_compile_options(swbench PRIVATE "-fopenmp")
+    add_compile_options("-fopenmp")
 endif ()
+add_library(swbench::swbench ALIAS swbench)
 
 if(SW_BENCHMARK_TOP_LEVEL)
     add_subdirectory(

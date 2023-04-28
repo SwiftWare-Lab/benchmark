@@ -8,10 +8,10 @@ include_directories(${sw_benchmark_INCLUDE_DIRS})
 project(examples)
 
     add_executable(gemvwithPAPI  ${EXAMPLES_DIR}/GEMV_With_PAPI.cpp)
-    target_link_libraries(gemvwithPAPI sw_benchmark )
+    target_link_libraries(gemvwithPAPI swbench::swbench )
 
 
 if(PROFILING_WITH_LIKWID)
     add_executable(gemvwithLIKWID  ${EXAMPLES_DIR}/GEMV_With_Likwid.cpp)
-    target_link_libraries(gemvwithLIKWID sw_benchmark )
+    target_link_libraries(gemvwithLIKWID swbench::swbench )
 endif ()

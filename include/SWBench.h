@@ -9,61 +9,61 @@
 
 
 namespace swiftware{
- namespace benchmark{
+namespace benchmark{
 
 
 
 
-  class SWBench{
-  protected:
-   Stats *St;
+class SWBench{
+protected:
+  Stats *St;
 
 
 
-   virtual void setup(){
-   }
+  virtual void setup(){
+  }
 
-   virtual Timer analysis(){
+  virtual Timer analysis(){
     return Timer();
-   }
+  }
 
-   virtual void preExecute(){
-   }
+  virtual void preExecute(){
+  }
 
-   virtual Timer execute(){
+  virtual Timer execute(){
     return Timer();
-   }
+  }
 
-   virtual int collectProfilingInfo(int TrialNo = 0);
-   virtual int enableProfiling();
+  virtual int collectProfilingInfo(int TrialNo = 0);
+  virtual int enableProfiling();
 
-   virtual bool verify(double &Error){
+  virtual bool verify(double &Error){
     return true;
-   }
+  }
 
-   virtual void teardown(){
-   }
+  virtual void teardown(){
+  }
 
-  public:
+public:
 
-   SWBench(Stats *St1);
-   ~SWBench();
+  SWBench(Stats *St1);
+  ~SWBench();
 
-   /*
+  /*
     * The main function to run the benchmark, shows the overall
-    */
-   void run();
+   */
+  void run();
 
-   virtual std::string printStatsHeader(){
+  virtual std::string printStatsHeader(){
     return St->printCSVHeader();
-   }
-   virtual std::string printStats(){
+  }
+  virtual std::string printStats(){
     return St->printCSV();
-   }
-  };
+  }
+};
 
 
-  } // namespace benchmark
- } // namespace swiftware
+} // namespace benchmark
+} // namespace swiftware
 
 #endif //SW_BENCHMARK_SWBENCH_H

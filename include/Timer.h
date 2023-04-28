@@ -30,7 +30,7 @@ namespace swiftware{
    /// Also add the region name to the array of elapsed times
    /// the start() must be called before this call once
    /// any call to stop added a time to the array (supporting multiple regions )
-   double stop(std::string RegionName);
+   double stop(std::string RegionName="");
 
    /// Reset the timer
    void reset ();

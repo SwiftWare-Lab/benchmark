@@ -24,7 +24,7 @@ struct Inputs{
   double *A, *x, *y;
 
   Inputs(int Dim1, int Dim2, int Dim3, int Dim4):
-          Dim1(Dim1), Dim2(Dim2), Dim3(Dim3), Dim4(Dim4), CorrectSol(nullptr){
+                                                   Dim1(Dim1), Dim2(Dim2), Dim3(Dim3), Dim4(Dim4), CorrectSol(nullptr){
   }
 
   virtual std::string printCSVHeader(std::string Sep=",");
@@ -47,7 +47,11 @@ protected:
   Inputs<T> *In;
   Outputs<T> *Out{};
 
-
+  virtual Timer analysis() override{
+    Timer t1;
+    t1.start(); t1.stop("Analysis");
+    return t1;
+  }
   bool verify(double &Error) override{
     bool retValue = true;
     T infNorm = 0;

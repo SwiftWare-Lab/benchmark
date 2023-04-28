@@ -74,7 +74,7 @@ protected:
     Timer t;
     t.start();
     GEMV(In->Dim1, In->Dim2, In->A, In->x, In->y);
-    t.stop(St->Name+" Executor");
+    t.stop();
     return t;
   }
 
@@ -92,7 +92,7 @@ protected:
     Timer t;
     t.start();
     GEMVVec(In->Dim1, In->Dim2, In->A, In->x, In->y);
-    t.stop(St->Name+" Executor");
+    t.stop();
     return t;
   }
 public:
