@@ -89,7 +89,7 @@ set(sw_benchmark_SRC_FILES
 add_library(swbench
         ${sw_benchmark_SRC_FILES}
         )
-target_include_directories(swbench PRIVATE
+target_include_directories(swbench PUBLIC
         ${sw_benchmark_INCLUDE_DIRS}
         )
 target_link_libraries(swbench PRIVATE
