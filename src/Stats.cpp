@@ -16,6 +16,22 @@ Stats::Stats(std::string Name, std::string OpName, int NumTrials):
   }
 }
 
+Stats::Stats(std::string Name, std::string OpName, int NumTrials, std::string MatrixName,
+             int NumThreads) : Name(Name), OperationName(OpName), NumTrials(NumTrials),
+                               MatrixName(MatrixName) {
+  ProfilingInfoTrials.resize(NumTrials);
+  for (int i = 0; i < NumTrials; ++i) {
+    ProfilingInfoTrials[i] = new ProfilingInfo();
+    ProfilingInfoTrials[i]->NumThreads = NumThreads;
+  }
+}
+
+Stats::~Stats() {
+  for (int i = 0; i < NumTrials; ++i) {
+    delete ProfilingInfoTrials[i];
+  }
+}
+
 std::string Stats::printCSVHeader(std::string Sep) {
   std::ostringstream os;
   std::string pHeader="", tHeader="", analysisHeader="";
@@ -45,6 +61,7 @@ std::string Stats::printCSVHeader(std::string Sep) {
 
 std::string Stats::printCSV(std::string Sep) {
   std::ostringstream os;
+
   std::string pCSV="", tCSV="", analysisCSV="";
   assert(NumTrials>=1);
   assert(ProfilingInfoTrials.size()>=1);

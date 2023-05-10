@@ -4,6 +4,7 @@
 
 #include "Timer.h"
 #include <cassert>
+#include <sstream>
 
 namespace swiftware{
  namespace benchmark{
@@ -60,10 +61,18 @@ namespace swiftware{
    return header;
   }
 
+  template <typename T>
+  std::string toStringWithPrecision(const T AValue, const int N = 9){
+   std::ostringstream out;
+   out.precision(N);
+   out << std::fixed << AValue;
+   return std::move(out).str();
+  }
+
   std::string Timer::printTimeCsv(int TrialNo, std::string Sep) {
    std::string csv;
    for (int i = 0; i < ElapsedTimeArray.size(); i++) {
-    csv += std::to_string(ElapsedTimeArray[i].first) + Sep;
+    csv += toStringWithPrecision<double>(ElapsedTimeArray[i].first, 9) + Sep;
    }
    return csv;
   }

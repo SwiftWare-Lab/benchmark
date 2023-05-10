@@ -9,7 +9,7 @@ include(DownloadProject)
 # set top level variable
 set(SW_BENCHMARK_TOP_LEVEL ON CACHE BOOL "Suppressing benchmark's tests" FORCE)
 set(GOOGLE_BENCHMARK_REQUIRED OFF CACHE BOOL "GBench is needed" FORCE)
-set(PROFILING_WITH_PAPI ON CACHE BOOL "PAPI is needed" FORCE)
+set(PROFILING_WITH_PAPI OFF CACHE BOOL "PAPI is needed" FORCE)
 set(PROFILING_WITH_LIKWID OFF CACHE BOOL "LIKWID is needed" FORCE)
 
 

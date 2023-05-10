@@ -27,6 +27,10 @@ struct Inputs{
                                                    Dim1(Dim1), Dim2(Dim2), Dim3(Dim3), Dim4(Dim4), CorrectSol(nullptr){
   }
 
+  Inputs(int NTrial, int NThr,  std::string ExpN):
+                                                  NumTrials(NTrial), NumThreads(NThr), ExpName(ExpN){
+  }
+
   virtual std::string printCSVHeader(std::string Sep=",");
 
   virtual std::string printCSV(std::string Sep=",");
@@ -54,6 +58,8 @@ protected:
   }
   bool verify(double &Error) override{
     bool retValue = true;
+    if(In->CorrectSol == nullptr)
+      return true;
     T infNorm = 0;
     for (int i = 0; i < In->Dim1; ++i) {
       if (std::abs(Out->Out[i] - In->CorrectSol[i]) > infNorm){

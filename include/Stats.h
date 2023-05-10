@@ -45,6 +45,11 @@ namespace swiftware{
 
    Stats(std::string Name, std::string OpName, int NumTrials);
 
+   Stats(std::string Name, std::string OpName, int NumTrials, std::string MatrixName,
+         int NumThreads);
+
+   ~Stats();
+
   };
 
 
