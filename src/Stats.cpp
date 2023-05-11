@@ -40,14 +40,15 @@ std::string Stats::printCSVHeader(std::string Sep) {
     os <<"Operation Name"<<Sep<<"Implementation Name"<<Sep<<"Number of Trials"<<Sep;
     os <<"Matrix Name"<<Sep<<"Number of Threads"<<Sep<<"Number of Subregions"<<Sep;
     analysisHeader = ProfilingInfoTrials[0]->AnalysisTime.printTimeCsvHeader("", 0);
-    for (int i = 0; i < NumTrials; ++i) {
+    os << analysisHeader;
+        for (int i = 0; i < NumTrials; ++i) {
       //tHeader += "Trial" + std::to_string(i) + "_Time" + Sep;
       //pHeader += ProfilingInfoTrials[i]->printCSVHeader(Sep);
       tHeader = ProfilingInfoTrials[i]->ExecutorTime.printTimeCsvHeader(
           "Executor", i);
       pHeader = ProfilingInfoTrials[i]->printCSVHeader("", i);
       auto err = "Correct" + std::to_string(i) + Sep + "Error" + std::to_string(i);
-      os << analysisHeader << tHeader << pHeader << err << Sep;
+      os << tHeader << pHeader << err << Sep;
     }
     for (auto &i : OtherStats) {
       for (int j = 0; j < i.second.size(); ++j) {
