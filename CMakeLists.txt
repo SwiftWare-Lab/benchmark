@@ -25,10 +25,16 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # set the c++ standard to c++11
 set( CMAKE_CXX_STANDARD 11 )
 
-find_package( OpenMP REQUIRED)
-set(sw_benchmark_LIBRARIES
-        OpenMP::OpenMP_CXX
-        )
+find_package( OpenMP OPTIONAL_COMPONENTS)
+if(OpenMP_FOUND)
+    message(STATUS "OpenMP is enabled")
+    add_compile_definitions(OPENMP_ENABLED)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(sw_benchmark_LIBRARIES
+            OpenMP::OpenMP_CXX
+            )
+endif()
+
 
 if (PROFILING_WITH_LIKWID)
     message(STATUS "Profiling with LIKWID is enabled")
