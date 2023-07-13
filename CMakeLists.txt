@@ -14,9 +14,9 @@ else()
 endif()
 
 # set top level variable
-set(GOOGLE_BENCHMARK_REQUIRED OFF CACHE BOOL "GBench is needed" FORCE)
-set(PROFILING_WITH_PAPI OFF CACHE BOOL "PAPI is needed" FORCE)
-set(PROFILING_WITH_LIKWID OFF CACHE BOOL "LIKWID is needed" FORCE)
+set(GOOGLE_BENCHMARK_REQUIRED OFF CACHE BOOL "GBench is needed")
+set(PROFILING_WITH_PAPI OFF CACHE BOOL "PAPI is needed")
+set(PROFILING_WITH_LIKWID OFF CACHE BOOL "LIKWID is needed")
 
 
 project(swbench C CXX)
