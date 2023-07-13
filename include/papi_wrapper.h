@@ -28,7 +28,9 @@
 #    define PAPI_WRAPPER_H
 
 /* Need to compile with -lpapi flag */
+#ifdef PROF_WITH_PAPI
 #    include <papi.h>
+#endif
 
 /* Defined macros */
 #    define PW_D_LOW 0x01
