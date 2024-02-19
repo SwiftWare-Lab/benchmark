@@ -75,7 +75,7 @@ std::string Stats::printCSV(std::string Sep) {
     //tHeader += "Trial" + std::to_string(i) + "_Time" + Sep;
     //pHeader += ProfilingInfoTrials[i]->printCSVHeader(Sep);
     tCSV = ProfilingInfoTrials[i]->ExecutorTime.printTimeCsv(i);
-    pCSV += ProfilingInfoTrials[i]->printCSV( i);
+    pCSV = ProfilingInfoTrials[i]->printCSV( i);
     auto err = std::to_string(ProfilingInfoTrials[i]->ErrorPerExecute.first)+
         Sep+std::to_string(ProfilingInfoTrials[i]->ErrorPerExecute.second);
     os << tCSV << pCSV << err << Sep;
