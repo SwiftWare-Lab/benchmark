@@ -82,7 +82,7 @@ endif()
 
 
 
-set_source_files_properties(include/papi_wrapper.cpp PROPERTIES LANGUAGE CXX )
+#set_source_files_properties(include/papi_wrapper.cpp PROPERTIES LANGUAGE CXX )
 
 set(sw_benchmark_INCLUDE_DIRS
         ${sw_benchmark_INCLUDE_DIRS}
@@ -114,9 +114,16 @@ if (PROFILING_WITH_PAPI)
     #target_compile_options(swbench PRIVATE "-fopenmp")
     add_compile_options("-fopenmp")
 endif ()
+# if counter_file is defined, add it to the compile definitions
+
+if (DEFINED COUNTER_FILE)
+    message(STATUS "Counter file is defined: ${COUNTER_FILE}")
+    add_definitions(-DPAPI_FILE_LIST="${COUNTER_FILE}")
+endif ()
 add_library(swbench::swbench ALIAS swbench)
 
 if(SW_BENCHMARK_TOP_LEVEL)
     add_subdirectory(
             example)
 endif()
+

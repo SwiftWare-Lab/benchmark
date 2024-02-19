@@ -65,3 +65,12 @@ the results.
 The list of counters is specified in 
 [include/papi_counters.list](include/papi_counters.list). Each line 
 specifies a counter. You can use `//` to comment out a line. 
+
+You can add a new file of performance counters and specify it in by
+passing the file name to CMAKE using the `COUNTER_FILE` variable as
+follows:
+```bash
+cmake -DCOUNTER_FILE=your_counter_file.list ..
+```
+Please provide absolute path to the file. This will work if PAPI 
+profiling is enabled.
