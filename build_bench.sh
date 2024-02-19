@@ -27,7 +27,8 @@ module load gcc
 
 echo "---- Installing PAPI ----"
 # Install PAPI library
-git clone https://bitbucket.org/icl/papi.git  
+#git clone https://bitbucket.org/icl/papi.git  
+git clone https://github.com/icl-utk-edu/papi.git
 cd papi/src
 mkdir -p -- ${HOME}/programs/papi
 ./configure --prefix=${HOME}/programs/papi/
