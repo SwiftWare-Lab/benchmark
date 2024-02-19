@@ -60,7 +60,8 @@ elseif (PROFILING_WITH_PAPI)
             ${sw_benchmark_INCLUDE_DIRS}
             ${PAPI_INCLUDE_DIRS}
             )
-    add_compile_definitions(PROF_WITH_PAPI)
+    #add_compile_definitions(PROF_WITH_PAPI)
+    add_definitions(-DPROF_WITH_PAPI)
     set(sw_benchmark_SRC_FILES
             ${sw_benchmark_SRC_FILES}
             ${CMAKE_CURRENT_LIST_DIR}/src/papi_wrapper.cpp
