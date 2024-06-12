@@ -30,8 +30,9 @@ namespace swiftware{
 
   Timer::~Timer() {
 #ifdef SWB_GPU_ENABLED
-   cudaEventDestroy(StartGpuTime);
-   cudaEventDestroy(StopGpuTime);
+  // TODO : why this is already freed?
+  //cudaEventDestroy(StartGpuTime);
+  //cudaEventDestroy(StopGpuTime);
 #endif
   }
 
