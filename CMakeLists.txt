@@ -88,10 +88,6 @@ if (CUDA_FOUND AND CUDAToolkit_FOUND)
     enable_language(CUDA)
     set(PROJECT_LANGUAGES CXX CUDA)
     add_definitions(-DSWB_GPU_ENABLED)
-    # make it parent scope if it has parent
-    if(HAS_PARENT)
-        set(SWB_GPU_ENABLED ON PARENT_SCOPE)
-    endif()
     message(STATUS "SWB_GPU_ENABLED is defined")
 endif()
 
@@ -122,6 +118,7 @@ target_link_libraries(swbench PRIVATE
         ${sw_benchmark_LIBRARIES}
         )
 if (CUDA_FOUND AND CUDAToolkit_FOUND)
+    target_compile_definitions(swbench PUBLIC SWB_GPU_ENABLED)
     target_link_libraries(swbench PRIVATE
             CUDA::cudart
             )
