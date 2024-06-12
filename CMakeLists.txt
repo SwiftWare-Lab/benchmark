@@ -80,7 +80,15 @@ if(NOT TARGET benchmark::benchmark AND GOOGLE_BENCHMARK_REQUIRED)
             )
 endif()
 
+find_package(CUDA OPTIONAL_COMPONENTS)
+find_package(CUDAToolkit OPTIONAL_COMPONENTS)
 
+if (CUDA_FOUND AND CUDAToolkit_FOUND)
+    message(STATUS "CUDA found: ${CUDA_VERSION}")
+    enable_language(CUDA)
+    set(PROJECT_LANGUAGES CXX CUDA)
+    add_definitions(-DGPU_ENABLED)
+endif()
 
 #set_source_files_properties(include/papi_wrapper.cpp PROPERTIES LANGUAGE CXX )
 
@@ -108,6 +116,12 @@ target_include_directories(swbench PUBLIC
 target_link_libraries(swbench PRIVATE
         ${sw_benchmark_LIBRARIES}
         )
+if (CUDA_FOUND AND CUDAToolkit_FOUND)
+    target_link_libraries(swbench PRIVATE
+            CUDA::cudart
+            )
+endif()
+
 if (PROFILING_WITH_PAPI)
     #target_compile_definitions(swbench PRIVATE PW_MULTITHREAD)
     add_compile_definitions(PW_MULTITHREAD)
