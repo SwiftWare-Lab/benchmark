@@ -9,7 +9,7 @@
 #include <iostream>
 #include <vector>
 
-#ifdef GPU_ENABLED
+#ifdef SWB_GPU_ENABLED
 #include <driver_types.h>
 #include <cuda_runtime_api.h>
 #endif
@@ -23,7 +23,7 @@ namespace swiftware{
    std::chrono::time_point<std::chrono::system_clock> StartTime, EndTime;
    std::chrono::duration<double> ElapsedSeconds;
    bool IsRunning = false; // make sure we don't start a timer that is already running
-#ifdef GPU_ENABLED
+#ifdef SWB_GPU_ENABLED
    cudaEvent_t StartGpuTime;
    cudaEvent_t StopGpuTime;
 #endif
@@ -41,7 +41,7 @@ namespace swiftware{
    /// any call to stop added a time to the array (supporting multiple regions )
    double stop(std::string RegionName="");
 
-#ifdef GPU_ENABLED
+#ifdef SWB_GPU_ENABLED
    void startGPU();
    double stopGPU(std::string RegionName);
 #endif

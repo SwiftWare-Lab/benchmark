@@ -12,7 +12,7 @@ namespace swiftware{
   Timer::Timer() {
    IsRunning = false;
    ElapsedSeconds = std::chrono::duration<double>(0);
-#ifdef GPU_ENABLED
+#ifdef SWB_GPU_ENABLED
    cudaEventCreate(&StartGpuTime);
    cudaEventCreate(&StopGpuTime);
 #endif
@@ -29,7 +29,7 @@ namespace swiftware{
   }
 
   Timer::~Timer() {
-#ifdef GPU_ENABLED
+#ifdef SWB_GPU_ENABLED
    cudaEventDestroy(StartGpuTime);
    cudaEventDestroy(StopGpuTime);
 #endif
@@ -56,7 +56,7 @@ namespace swiftware{
    return ElapsedSeconds.count();
   }
 
-#ifdef GPU_ENABLED
+#ifdef SWB_GPU_ENABLED
   void Timer::startGPU(){
    if (IsRunning) {
     std::cout << "Timer is already running" << std::endl;
