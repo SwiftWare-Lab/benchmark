@@ -12,6 +12,10 @@ namespace swiftware{
   Timer::Timer() {
    IsRunning = false;
    ElapsedSeconds = std::chrono::duration<double>(0);
+#ifdef SWB_GPU_ENABLED
+   cudaEventCreate(&StartGpuTime);
+   cudaEventCreate(&StopGpuTime);
+#endif
   }
 
   Timer::Timer(const Timer &T){
@@ -22,6 +26,14 @@ namespace swiftware{
    StartTime = T.StartTime;
    EndTime = T.EndTime;
    ElapsedSeconds = T.ElapsedSeconds;
+  }
+
+  Timer::~Timer() {
+#ifdef SWB_GPU_ENABLED
+  // TODO : why this is already freed?
+  //cudaEventDestroy(StartGpuTime);
+  //cudaEventDestroy(StopGpuTime);
+#endif
   }
 
   void Timer::start() {
@@ -44,6 +56,32 @@ namespace swiftware{
    IsRunning = false;
    return ElapsedSeconds.count();
   }
+
+#ifdef SWB_GPU_ENABLED
+  void Timer::startGPU(){
+   if (IsRunning) {
+    std::cout << "Timer is already running" << std::endl;
+    assert(false);
+   }
+    cudaEventRecord(StartGpuTime);
+   IsRunning = true;
+  }
+
+  double Timer::stopGPU(std::string RegionName=""){
+    if (!IsRunning) {
+      std::cout << "Timer is not running" << std::endl;
+      assert(false);
+    }
+    cudaEventRecord(StopGpuTime);
+    cudaEventSynchronize(StopGpuTime);
+    float elapsed = 0;
+    cudaEventElapsedTime(&elapsed, StartGpuTime, StopGpuTime);
+    double elapsedDouble = (double) elapsed;
+    ElapsedTimeArray.push_back(std::make_pair(elapsedDouble,RegionName));
+    IsRunning = false;
+    return elapsed;
+  }
+#endif
 
   void Timer::reset (){
    ElapsedTimeArray.clear();
