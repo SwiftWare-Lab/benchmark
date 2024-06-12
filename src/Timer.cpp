@@ -76,7 +76,7 @@ namespace swiftware{
     cudaEventSynchronize(StopGpuTime);
     float elapsed = 0;
     cudaEventElapsedTime(&elapsed, StartGpuTime, StopGpuTime);
-    double elapsedDouble = (double) elapsed;
+    double elapsedDouble = (double) elapsed/1000.0; // making it seconds
     ElapsedTimeArray.push_back(std::make_pair(elapsedDouble,RegionName));
     IsRunning = false;
     return elapsed;
