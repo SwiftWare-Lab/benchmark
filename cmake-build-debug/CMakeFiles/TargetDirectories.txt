@@ -1,0 +1,6 @@
+/Users/mohamadmahdisalehidezfooli/Documents/Projects/benchmark/cmake-build-debug/CMakeFiles/swbench.dir
+/Users/mohamadmahdisalehidezfooli/Documents/Projects/benchmark/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/mohamadmahdisalehidezfooli/Documents/Projects/benchmark/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/mohamadmahdisalehidezfooli/Documents/Projects/benchmark/cmake-build-debug/example/CMakeFiles/gemvwithPAPI.dir
+/Users/mohamadmahdisalehidezfooli/Documents/Projects/benchmark/cmake-build-debug/example/CMakeFiles/edit_cache.dir
+/Users/mohamadmahdisalehidezfooli/Documents/Projects/benchmark/cmake-build-debug/example/CMakeFiles/rebuild_cache.dir

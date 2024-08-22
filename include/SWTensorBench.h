@@ -13,6 +13,7 @@ namespace benchmark{
 
 template <class T>
 struct Inputs{
+protected:
   int NumTrials = 7;
   int NumThreads = 1;
   std::string ExpName="";
