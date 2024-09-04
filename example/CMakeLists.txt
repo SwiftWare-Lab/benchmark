@@ -15,3 +15,7 @@ if(PROFILING_WITH_LIKWID)
     add_executable(gemvwithLIKWID  ${EXAMPLES_DIR}/GEMV_With_Likwid.cpp)
     target_link_libraries(gemvwithLIKWID swbench::swbench )
 endif ()
+
+    add_executable(gemvWithGBench
+            ${EXAMPLES_DIR}/GEMV_With_GBench.cpp)
+    target_link_libraries(gemvWithGBench benchmark::benchmark )

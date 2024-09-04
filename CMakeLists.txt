@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.26)
 
 list(APPEND CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/cmake
@@ -70,15 +70,29 @@ elseif (PROFILING_WITH_PAPI)
 endif ()
 
 # TODO: google benchmark is not used yet, might be used in the future
-find_package(benchmark OPTIONAL_COMPONENTS)
-if(NOT TARGET benchmark::benchmark AND GOOGLE_BENCHMARK_REQUIRED)
-    message(STATUS "benchmark not found, try to download it")
-    include(benchmark)
-    set(sw_benchmark_LIBRARIES
-            ${sw_benchmark_LIBRARIES}
-            benchmark::benchmark
-            )
-endif()
+#find_package(benchmark OPTIONAL_COMPONENTS)
+#if(NOT TARGET benchmark::benchmark AND GOOGLE_BENCHMARK_REQUIRED)
+#    message(STATUS "benchmark not found, try to download it")
+#    include(benchmark)
+#    set(sw_benchmark_LIBRARIES
+#            ${sw_benchmark_LIBRARIES}
+#            benchmark::benchmark
+#            )
+#endif()
+# enable BENCHMARK_DOWNLOAD_DEPENDENCIES
+
+
+include(FetchContent)
+FetchContent_Declare(
+        googlebenchmark
+        GIT_REPOSITORY https://github.com/google/benchmark.git
+        GIT_TAG v1.9.0
+)
+# enable BENCHMARK_DOWNLOAD_DEPENDENCIES
+set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON)
+# enable PFM
+set(BENCHMARK_ENABLE_LIBPFM ON)
+FetchContent_MakeAvailable(googlebenchmark)
 
 find_package(CUDA OPTIONAL_COMPONENTS)
 find_package(CUDAToolkit OPTIONAL_COMPONENTS)
