@@ -80,8 +80,11 @@ if(NOT TARGET benchmark::benchmark AND GOOGLE_BENCHMARK_REQUIRED)
             )
 endif()
 
-find_package(CUDA OPTIONAL_COMPONENTS)
-find_package(CUDAToolkit OPTIONAL_COMPONENTS)
+if (ENABLE_CUDA)
+    message(STATUS "CUDA is enabled")
+    find_package(CUDA OPTIONAL_COMPONENTS)
+    find_package(CUDAToolkit OPTIONAL_COMPONENTS)
+endif()
 
 if (CUDA_FOUND AND CUDAToolkit_FOUND)
     message(STATUS "CUDA found: ${CUDA_VERSION}")
