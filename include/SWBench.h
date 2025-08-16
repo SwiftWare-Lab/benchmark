@@ -7,11 +7,53 @@
 
 #include "Stats.h"
 
+#include <algorithm>
 
 namespace swiftware{
 namespace benchmark{
 
 
+// Step 1: Create a custom reporter class that inherits from BenchmarkReporter.
+// class MedianReporter : public benchmark::BenchmarkReporter {
+// public:
+//   bool ReportContext(const Context& context) override {
+//     std::cout << "--------------------------------------------------------\n";
+//     std::cout << "Benchmark           Time           CPU Time        Median\n";
+//     std::cout << "--------------------------------------------------------\n";
+//     return true;
+//   }
+//
+//   void ReportRuns(const std::vector<Run>& report) override {
+//     if (report.empty()) return;
+//
+//     // Collect real_time values for median calculation
+//     std::vector<double> times;
+//     for (const auto& run : report) {
+//       times.push_back(run.real_accumulated_time);
+//     }
+//     std::sort(times.begin(), times.end());
+//     double median = 0.0;
+//     size_t n = times.size();
+//     if (n > 0) {
+//       if (n % 2 == 0)
+//         median = 0.5 * (times[n / 2 - 1] + times[n / 2]);
+//       else
+//         median = times[n / 2];
+//     }
+//
+//     // Print the first run's info and the computed median
+//     const auto& run = report.front();
+//     std::cout << run.benchmark_name() << "    "
+//               << run.real_accumulated_time << "    "
+//               << run.cpu_accumulated_time << "    "
+//               << median << "\n";
+//   }
+//
+//   void Finalize() override {
+//     std::cout << "--------------------------------------------------------\n";
+//   }
+// };
+//
 
 
 class SWBench{

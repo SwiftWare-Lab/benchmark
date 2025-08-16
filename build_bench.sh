@@ -18,38 +18,38 @@
 ### It first installs PAPI and then builds the repository
 
 
-module load NiaEnv/.2022a
-module load intel/2022u2
-export MKL_DIR=$MKLROOT
-module load cmake
-module load gcc
+#module load NiaEnv/.2022a
+#module load intel/2022u2
+#export MKL_DIR=$MKLROOT
+#module load cmake
+#module load gcc
 
 
-echo "---- Installing PAPI ----"
-# Install PAPI library
-#git clone https://bitbucket.org/icl/papi.git  
-git clone https://github.com/icl-utk-edu/papi.git
-cd papi/src
-mkdir -p -- ${HOME}/programs/papi
-./configure --prefix=${HOME}/programs/papi/
-make
-make install
-cd ../../
-
+#echo "---- Installing PAPI ----"
+## Install PAPI library
+##git clone https://bitbucket.org/icl/papi.git
+#git clone https://github.com/icl-utk-edu/papi.git
+#cd papi/src
+#mkdir -p -- ${HOME}/programs/papi
+#./configure --prefix=${HOME}/programs/papi/
+#make
+#make install
+#cd ../../
+#
 
 echo "----- Building swbench -----"
 # Create build folder
 mkdir -p build && cd build
 
 # Configure
-cmake -DPROFILING_WITH_PAPI=ON -DCMAKE_BUILD_TYPE=Release -DPAPI_PREFIX=${HOME}/programs/papi/ ..
+cmake -DCMAKE_PREFIX_PATH=/home/kazem/development/libpfm4/ -DPROFILING_ENABLED=ON  -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin//nvcc -DCMAKE_CUDA_ARCHITECTURES=native -DCMAKE_BUILD_TYPE=Release ..
 
 # Build (for Make on Unix equivalent to `make -j $(nproc)`)
 cmake --build . --config Release -- -j4
 
 echo "---- running an example ----"
 
-./example/gemvwithPAPI
+./example/copy_cpu --benchmark_perf_counters=L1-dcache-load-misses,L1-dcache-loads
 
 
 
