@@ -148,12 +148,8 @@ set(sw_benchmark_INCLUDE_DIRS
         )
 set(sw_benchmark_SRC_FILES
         ${sw_benchmark_SRC_FILES}
-        ${CMAKE_CURRENT_LIST_DIR}/src/Timer.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/src/Stats.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/src/ProfilingInfo.cpp
         ${CMAKE_CURRENT_LIST_DIR}/src/SWBench.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/src/SWTensorBench.cpp
-        )
+)
 
 
 

@@ -49,7 +49,7 @@ cmake --build . --config Release -- -j4
 
 echo "---- running an example ----"
 
-./example/copy_cpu --benchmark_perf_counters=L1-dcache-load-misses,L1-dcache-loads
+./example/copy_cpu --benchmark_perf_counters="cpu-cycles" --benchmark_out="copy_cpu.json" --benchmark_out_format=json
 
 
 

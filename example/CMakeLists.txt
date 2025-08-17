@@ -7,20 +7,10 @@ include_directories(${sw_benchmark_INCLUDE_DIRS})
 
 project(examples)
 
-    add_executable(gemvwithPAPI  ${EXAMPLES_DIR}/GEMV_With_PAPI.cpp)
-    target_link_libraries(gemvwithPAPI swbench::swbench )
-
-add_executable(copy_cpu
-        ${EXAMPLES_DIR}/copy_cpu.cpp
+add_executable(gemv_cpu
+        ${EXAMPLES_DIR}/gemv_cpu.cpp
 )
-target_link_libraries(copy_cpu
+target_link_libraries(gemv_cpu
         swbench::swbench
         benchmark::benchmark
 )
-
-
-
-#if(PROFILING_WITH_LIKWID)
-#    add_executable(gemvwithLIKWID  ${EXAMPLES_DIR}/GEMV_With_Likwid.cpp)
-#    target_link_libraries(gemvwithLIKWID swbench::swbench )
-#endif ()
